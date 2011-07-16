@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="C:/Users/Tim/minecraft/bukkit/953/bukkit-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Tim/minecraft/bukkit/953/craftbukkit-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Tim/minecraft/plugins/Permissions-3.1.6.jar"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

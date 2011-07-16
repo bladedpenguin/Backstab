@@ -1,5 +1,7 @@
 package com.bladedpenguin.backstab;
 
+import java.util.logging.Logger;
+
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -8,14 +10,16 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.Plugin;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
-import com.bladedpenguin.backstab.listeners.*;
+import com.bladedpenguin.backstab.listeners.BackstabEntityListener;
 
 public class Backstab extends JavaPlugin {
+
+		private double bonusMultiplier;
+		private boolean narrowTarget;
+		private boolean ignoreArmor;
 	    private final BackstabEntityListener entityListener = new BackstabEntityListener(this);
 	    public static PermissionHandler permissionHandler;
-	    //private final SampleBlockListener blockListener = new SampleBlockListener(this);
-	    //private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
-
+	    
 	    // NOTE: There should be no need to define a constructor any more for more info on moving from
 	    // the old constructor see:
 	    // http://forums.bukkit.org/threads/too-long-constructor.5032/
@@ -37,15 +41,14 @@ public class Backstab extends JavaPlugin {
 	        // Register our events
 	        PluginManager pm = getServer().getPluginManager();
 	        pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Normal, this);
-	        //pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-	        //pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
-	        //pm.registerEvent(Event.Type.BLOCK_PHYSICS, blockListener, Priority.Normal, this);
-	        //pm.registerEvent(Event.Type.BLOCK_CANBUILD, blockListener, Priority.Normal, this);
-
-	        // Register our commands
-	        //getCommand("pos").setExecutor(new SamplePosCommand(this));
-	        //getCommand("debug").setExecutor(new SampleDebugCommand(this));
-
+	        
+	        //get configs
+	        getConfiguration().load();
+	        setBonusMultiplier(getConfiguration().getDouble("bonusMultiplier", 2.0));
+	        setNarrowTarget(getConfiguration().getBoolean("narrowTarget",false));
+	        setIgnoreArmor(getConfiguration().getBoolean("ignoreArmor",false));
+	        getConfiguration().save();
+	        
 	        // EXAMPLE: Custom code, here we just output some info so we can check all is well
 	        PluginDescriptionFile pdfFile = this.getDescription();
 	        System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
@@ -69,7 +72,36 @@ public class Backstab extends JavaPlugin {
 	    private void log(String string) {
 			System.out.println(string);
 		}
+	    protected static Logger logger() {
+	        return Logger.getLogger("Minecraft");
+	    }
 
+		public void setBonusMultiplier(double bonusMultiplier) {
+			this.bonusMultiplier = bonusMultiplier;
+		}
+
+		public double getBonusMultiplier() {
+			return bonusMultiplier;
+		}
+
+		public void setNarrowTarget(boolean narrowTarget) {
+			this.narrowTarget = narrowTarget;
+		}
+
+		public boolean isNarrowTarget() {
+			return narrowTarget;
+		}
+
+		public void setIgnoreArmor(boolean ignoreArmor) {
+			this.ignoreArmor = ignoreArmor;
+		}
+
+		public boolean isIgnoreArmor() {
+			return ignoreArmor;
+		}
+
+
+	    
 /*		public boolean isDebugging(final Player player) {
 	        if (debugees.containsKey(player)) {
 	            return debugees.get(player);
