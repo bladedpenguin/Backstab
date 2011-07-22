@@ -19,17 +19,21 @@ public class BackstabEntityListener extends EntityListener {
         plugin = instance;
         
     }
-    public void onEntityDamage(EntityDamageEvent e){ //if this doesn't work try EntityDamageEvent and uncomment below
+    public void onEntityDamage(EntityDamageEvent e){ 
     	if (!(e instanceof EntityDamageByEntityEvent )){
     		return;
     	}
     	EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) e; 
-    	Entity rogue = event.getDamager();
+    	Entity r = event.getDamager();
     	if (event.isCancelled())
     		return;
-    	if (!(rogue instanceof Player)) 
+    	if (!(r instanceof Player)) 
     		return;
-    	rogue = (Player) rogue;
+    	Player rogue = (Player) r;
+    	
+    	if (rogue.getItemInHand().getType() == org.bukkit.Material.BOW) //disallow ranged sneakattacks
+    		return;
+
     	if (!Backstab.permissionHandler.permission((Player) rogue, "backstab.stab"))
     		return;
     	if (!(event.getEntity() instanceof LivingEntity))
